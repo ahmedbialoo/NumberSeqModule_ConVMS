@@ -1,0 +1,54 @@
+1. extend NumberSeqModule Enum 
+2. add new element named ConVMSVehicleManagement
+3. Create new class NumberSeqModule_CS and extend NumberSeqApplicationModule
+4. 
+internal final class NumberSeqModule_ConVMS extends NumberSeqApplicationModule
+{
+    public NumberSeqModule numberSeqModule()
+    {
+        return NumberSeqModule::ConVMSVehicleManagement;
+    }
+
+    /// <summary>
+    /// Appends the current class to the map that links
+    /// modules to number sequence data type generators.
+    /// </summary>
+    [SubscribesTo(classstr(NumberSeqGlobal), delegatestr(NumberSeqGlobal, buildModulesMapDelegate))]
+        static void buildModulesMapSubscriber(Map numberSeqModuleNameMap)
+    {
+        NumberSeqGlobal::addModuleToMap( classnum(NumberSeqModule_ConVMS), numberSeqModuleNameMap);
+    }
+
+    protected void loadModule()
+    {
+        NumberSeqDatatype datatype;
+        datatype = NumberSeqDatatype::construct();
+        // Vehicle number
+        datatype.parmDatatypeId(extendedTypeNum(ConVMSVehicleId));
+        // Unique key for the identification of vehicles.
+        // The key is used when creating new vehicles
+        datatype.parmReferenceHelp(literalstr("Vehicle Id"));
+        datatype.parmWizardIsContinuous(false);
+        datatype.parmWizardIsManual(NoYes::No);
+        datatype.parmWizardIsChangeDownAllowed(NoYes::No);
+        datatype.parmWizardIsChangeUpAllowed(NoYes::No);
+        datatype.parmWizardHighest(999999);
+        datatype.parmSortField(1);
+        datatype.addParameterType(NumberSeqParameterType::DataArea,true, false);
+        this.create(datatype);
+        // Vehicle service order
+        datatype.parmDatatypeId(extendedTypeNum(ConVMSVehicleServiceId));
+        // Unique key for the identification of service orders.
+        // The key is used when creating new services orders
+        datatype.parmReferenceHelp(literalstr("<Service Id>"));
+        datatype.parmWizardIsContinuous(false);
+        datatype.parmWizardIsManual(NoYes::No);
+        datatype.parmWizardIsChangeDownAllowed(NoYes::No);
+        datatype.parmWizardIsChangeUpAllowed(NoYes::No);
+        datatype.parmWizardHighest(999999);
+        datatype.parmSortField(2);
+        datatype.addParameterType(NumberSeqParameterType::DataArea, true, false);
+        this.create(datatype);
+    }
+
+}
