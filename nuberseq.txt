@@ -52,3 +52,55 @@ internal final class NumberSeqModule_ConVMS extends NumberSeqApplicationModule
     }
 
 }
+5. copy and past the parameter form
+6. edit the serviceTable as follows
+protected NumberSeqFormHandler numberSeqFormHandler( FormRun _formRun, FormDataSource _serviceTableDS)
+    {
+        if (!numberSeqFormHandler)
+        {
+            RefRecId localNumSeqId;
+            RefFieldId serviceIdField;
+            localNumSeqId = ConVMSParameters::NumRefServiceId().NumberSequenceId;
+            serviceIdField = fieldNum(ConVMSVehicleServiceTable, ServiceId);
+            numberSeqFormHandler = NumberSeqFormHandler::newForm( localNumSeqId, _formRun, _serviceTableDS, serviceIdField);
+        }
+        return numberSeqFormHandler;
+    }
+
+    public void formMethodClose()
+    {
+        if (numberSeqFormHandler)
+        {
+            numberSeqFormHandler.formMethodClose();
+        }
+    }
+
+    public void formMethodDataSourceCreate(FormRun _element, FormDataSource _serviceTableDS)
+    {
+        this.numberSeqFormHandler(_element, _serviceTableDS).formMethodDataSourceCreate();
+    }
+
+    public void formMethodDataSourceDelete( FormRun _element, FormDataSource _serviceTableDS, boolean _forced = false)
+    {
+        this.numberSeqFormHandler(_element, _serviceTableDS).formMethodDataSourceDelete(_forced);
+    }
+
+    public void formMethodDataSourceLinkActive(FormRun _element, FormDataSource _serviceTableDS)
+    {
+        this.numberSeqFormHandler(_element, _serviceTableDS).formMethodDataSourceLinkActive();
+    }
+
+    public boolean formMethodDataSourceValidateWrite( FormRun _element, FormDataSource _serviceTableDS)
+    {
+        boolean ret = true;
+        if (!this.numberSeqFormHandler( _element, _serviceTableDS).formMethodDataSourceValidateWrite())
+        {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public void formMethodDataSourceWrite( FormRun _element, FormDataSource _serviceTableDS)
+    {
+        this.numberSeqFormHandler(_element, _serviceTableDS).formMethodDataSourceWrite();
+    }
